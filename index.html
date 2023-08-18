@@ -15,8 +15,8 @@
     <h2 class="text-gray-800 text-4xl font-bold text-center">All Students</h2>
     <div class="student-data-table mt-10">
       <div class="top-pane w-11/12 m-auto bg-white py-5 px-5">
-        <button class="bg-green-700 rounded-md text-gray-50 font-bold py-2 px-4" onclick="showModal('addStudentModal')"
-          id="openModalBtn">Add New
+        <button class="bg-green-700 rounded-md text-gray-50 font-bold py-2 px-4"
+          onclick="showStudentAddModal('addStudentModal')" id="openModalBtn">Add New
           Students</button>
         <div class="student-table">
           <!-- student data table -->
@@ -104,19 +104,9 @@
     <div id="viewModal" class="modal">
       <div class="modal-content">
         <span id="closeViewModalBtn" class="close closeModalBtn">&times;</span>
-        <div class="top-pane flex justify-between gap-4 items-start">
-          <div class="img">
-            <img class="w-full" src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
-              alt="">
-          </div>
-          <div class="info">
-            <h3 class="name text-green-700 font-bold text-4xl">Shahadat Hussain Ripon</>
-              <h6 class="email text-gray-600 font-medium">devripon.io@gmail.com</>
-                <h6 class="location text-gray-600 font-medium">Govindanagar, Nalitabari, Sherpur.</>
+        <div class="view-container">
 
-          </div>
         </div>
-        <div class="info-table"></div>
       </div>
     </div>
     <!-- //student Edit modal -->
@@ -124,17 +114,17 @@
       <div class="modal-content">
         <span id="editcloseModalBtn" class="close closeModalBtn">&times;</span>
         <h2 class="my-4 font-bold text-3xl text-gray-500">Edit Students Data</h2>
-        <div class="msg-container">
+        <div class="editmsg-container">
           <!-- alert massage -->
-          <div id="msg" class="msg text-red-900 flex place-self-start py-4 px-2 bg-red-300 rounded w-full items-center">
+          <!-- <div id="msg" class="msg text-red-900 flex place-self-start py-4 px-2 bg-red-300 rounded w-full items-center">
             <div class="msg-body m-0"> <i class="ri-error-warning-fill"></i> All Feilds Are
               Required</div>
             <i onclick="closeAlert()"
               class="ri-close-circle-fill mr-0 cursor-pointer transform duration-300 hover:scale-110 hover:text-red-700"></i>
-          </div>
+          </div> -->
           <!-- alert massage -->
         </div>
-        <form action="" id="student-add-form">
+        <form action="" id="studentEditform">
           <div class="mb-2">
             <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
             <input type="text" name="name" id="name"
@@ -162,18 +152,13 @@
 
           </div>
           <div class="mb-2">
-            <label for="photourl" class="block text-gray-700 text-sm font-bold mb-2">Photo url</label>
-            <input type="text" name="photourl" id="photourl"
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-          </div>
-          <div class="mb-2">
             <label for="gender" class="block text-gray-700 text-sm font-bold mb-2">Gender</label>
             <label class="text-gray-700" for="male"><input type="radio" name="gender" id="male" value="male">
               Male</label>
             <label class="text-gray-700" for="female"><input type="radio" name="gender" id="female" value="female">
               Female</label>
           </div>
-          <div class="mb-2">
+          <!-- <div class="mb-2">
             <label for="course" class="block text-gray-700 text-sm font-bold mb-2">Course</label>
             <select class="w-80 rounded-md py-4 border border-gray-400" name="course" id="course">
               <option value="">Select Course</option>
@@ -182,7 +167,7 @@
               <option value="Android App Development">Android App Development</option>
               <option value="Laravel Development">Laravel Development</option>
             </select>
-          </div>
+          </div> -->
           <div class="mb-2">
             <input type="submit" id="submit" name="submit" value="Add Now"
               class="shadow appearance-none bg-green-600 border text-white hover:bg-green-800 transform duration-300 rounded w-full py-3 px-3 font-medium leading-tight focus:outline-none focus:shadow-outline">
