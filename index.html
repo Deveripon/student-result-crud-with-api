@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Result System | Data Crud With REST API</title>
+  <link rel="stylesheet" href="./public/src/css/style.css">
+  <link rel="stylesheet" href="./public/src/css/custom.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-300 h-screen w-screen mx-auto mt-10 overflow-x-hidden ">
+  <div id="main-container" class="relative">
+    <h2 class="text-gray-800 text-4xl font-bold text-center">All Students</h2>
+    <div class="student-data-table mt-10">
+      <div class="top-pane w-11/12 m-auto bg-white py-5 px-5">
+        <button class="bg-green-700 rounded-md text-gray-50 font-bold py-2 px-4" onclick="showModal('addStudentModal')"
+          id="openModalBtn">Add New
+          Students</button>
+        <div class="student-table">
+          <!-- student data table -->
+          <table class="table-auto w-full mt-1">
+            <thead class="bg-gray-300 h-10">
+              <th class="border border-gray-200 border-l-0">#</th>
+              <th class="border border-gray-200">Photo</th>
+              <th class="border border-gray-200">Name</th>
+              <th class="border border-gray-200">Email</th>
+              <th class="border border-gray-200">Gender</th>
+              <th class="border border-gray-200">Course ID</th>
+              <th class="border border-gray-200">Address</th>
+              <th class="border border-gray-200">Mobile</th>
+              <th class="border border-gray-200">Result</th>
+              <th class="border border-gray-200">Action</th>
+            </thead>
+            <tbody class="student-list-container" id="studentListContainer">
+              <!-- student -->
+
+              <!-- student -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- //student add modal -->
+    <div id="addStudentModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModalBtn" class="close closeModalBtn">&times;</span>
+        <h2 class="my-4 font-bold text-3xl text-gray-500">Add New Student</h2>
+        <div class="msg-container">
+          <!-- alert massage -->
+
+          <!-- alert massage -->
+        </div>
+        <form action="" id="studentAddForm">
+          <div class="mb-2">
+            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+            <input type="text" name="name" id="name"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          </div>
+          <div class="mb-2">
+            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+            <input type="text" name="email" id="email"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          </div>
+          <div class="mb-2">
+            <label for="mobile" class="block text-gray-700 text-sm font-bold mb-2">Mobile</label>
+            <input type="text" name="mobile" id="mobile"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          </div>
+          <div class="mb-2">
+            <label for="address" class="block text-gray-700 text-sm font-bold mb-2">Address</label>
+            <textarea type="text" name="address" id="address"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+          </div>
+          <div class="mb-2">
+            <label for="photourl" class="block text-gray-700 text-sm font-bold mb-2">Photo url</label>
+            <input type="text" name="photourl" id="photourl"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+
+          </div>
+          <div class="mb-2">
+            <label for="gender" class="block text-gray-700 text-sm font-bold mb-2">Gender</label>
+            <label class="text-gray-700" for="male"><input type="radio" name="gender" id="male" value="male">
+              Male</label>
+            <label class="text-gray-700" for="female"><input type="radio" name="gender" id="female" value="female">
+              Female</label>
+          </div>
+          <div class="mb-2">
+            <label for="course" class="block text-gray-700 text-sm font-bold mb-2">Course</label>
+            <select class="w-80 rounded-md py-4 border border-gray-400" name="course" id="courses">
+              <!-- dynamic courses will go there -->
+            </select>
+          </div>
+          <div class="mb-2">
+            <input type="submit" id="submit" name="submit" value="Add Now"
+              class="shadow appearance-none bg-green-600 border text-white hover:bg-green-800 transform duration-300 rounded w-full py-3 px-3 font-medium leading-tight focus:outline-none focus:shadow-outline">
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- //single student view modal -->
+    <div id="viewModal" class="modal">
+      <div class="modal-content">
+        <span id="closeViewModalBtn" class="close closeModalBtn">&times;</span>
+        <div class="top-pane flex justify-between gap-4 items-start">
+          <div class="img">
+            <img class="w-full" src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
+              alt="">
+          </div>
+          <div class="info">
+            <h3 class="name text-green-700 font-bold text-4xl">Shahadat Hussain Ripon</>
+              <h6 class="email text-gray-600 font-medium">devripon.io@gmail.com</>
+                <h6 class="location text-gray-600 font-medium">Govindanagar, Nalitabari, Sherpur.</>
+
+          </div>
+        </div>
+        <div class="info-table"></div>
+      </div>
+    </div>
+    <!-- //student Edit modal -->
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <span id="editcloseModalBtn" class="close closeModalBtn">&times;</span>
+        <h2 class="my-4 font-bold text-3xl text-gray-500">Edit Students Data</h2>
+        <div class="msg-container">
+          <!-- alert massage -->
+          <div id="msg" class="msg text-red-900 flex place-self-start py-4 px-2 bg-red-300 rounded w-full items-center">
+            <div class="msg-body m-0"> <i class="ri-error-warning-fill"></i> All Feilds Are
+              Required</div>
+            <i onclick="closeAlert()"
+              class="ri-close-circle-fill mr-0 cursor-pointer transform duration-300 hover:scale-110 hover:text-red-700"></i>
+          </div>
+          <!-- alert massage -->
+        </div>
+        <form action="" id="student-add-form">
+          <div class="mb-2">
+            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+            <input type="text" name="name" id="name"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          </div>
+          <div class="mb-2">
+            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+            <input type="text" name="email" id="email"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          </div>
+          <div class="mb-2">
+            <label for="mobile" class="block text-gray-700 text-sm font-bold mb-2">Mobile</label>
+            <input type="text" name="mobile" id="mobile"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          </div>
+          <div class="mb-2">
+            <label for="address" class="block text-gray-700 text-sm font-bold mb-2">Address</label>
+            <textarea type="text" name="address" id="address"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+          </div>
+          <div class="mb-2">
+            <label for="photourl" class="block text-gray-700 text-sm font-bold mb-2">Photo url</label>
+            <input type="text" name="photourl" id="photourl"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+
+          </div>
+          <div class="mb-2">
+            <label for="photourl" class="block text-gray-700 text-sm font-bold mb-2">Photo url</label>
+            <input type="text" name="photourl" id="photourl"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          </div>
+          <div class="mb-2">
+            <label for="gender" class="block text-gray-700 text-sm font-bold mb-2">Gender</label>
+            <label class="text-gray-700" for="male"><input type="radio" name="gender" id="male" value="male">
+              Male</label>
+            <label class="text-gray-700" for="female"><input type="radio" name="gender" id="female" value="female">
+              Female</label>
+          </div>
+          <div class="mb-2">
+            <label for="course" class="block text-gray-700 text-sm font-bold mb-2">Course</label>
+            <select class="w-80 rounded-md py-4 border border-gray-400" name="course" id="course">
+              <option value="">Select Course</option>
+              <option value="MERN Stack Development">MERN Stack Development</option>
+              <option value="IOS Development">IOS Development</option>
+              <option value="Android App Development">Android App Development</option>
+              <option value="Laravel Development">Laravel Development</option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <input type="submit" id="submit" name="submit" value="Add Now"
+              class="shadow appearance-none bg-green-600 border text-white hover:bg-green-800 transform duration-300 rounded w-full py-3 px-3 font-medium leading-tight focus:outline-none focus:shadow-outline">
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <script src="./public/src/js/functions.js"></script>
+  <script src="./public/src/js/index.js"></script>
+  <script src="./public/src/js/main.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "tailwind-kit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tailwindcss -i ./public/src/tailwindInput/tailwind.css -o ./public/src/css/style.css --watch",
+    "post-css": "npx tailwindcss -i ./public/src/tailwindInput/tailwind.css -o ./public/src/css/style.css --watch",
+    "sass": "node-sass --watch ./public/src/scss/main.scss ./public/src/css/custom.css --output-style compressed"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.26",
+    "tailwindcss": "^3.3.3",
+    "node-sass": "^9.0.0"
+  },
+  "dependencies": {
+    "postcss-cli": "^10.1.0"
+  }
+}
