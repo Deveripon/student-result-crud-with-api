@@ -4,6 +4,9 @@ const StudentAddForm = document.getElementById("studentAddForm");
 const msgContainer = document.querySelector(".msg-container");
 const editmsgContainer = document.querySelector(".editmsg-container");
 const viewContainer = document.querySelector(".view-container");
+const resultAddForm = document.getElementById("resultAddform");
+const resultMassageContainer = document.querySelector(".resultmsg-container");
+const resultViewModal = document.getElementById("resultViewModal");
 //Show Course LIst into form
 const showCourseList = async function (apiLink) {
   await axios
@@ -45,10 +48,10 @@ const getAllStudent = async function (apiLink) {
       <td class="border border-gray-200 text-center">${student.address}</td>
       <td class="border border-gray-200 text-center">${student.phone}</td>
       <td class="border border-gray-200 text-center">
-      ${student.result?`<button onclick="showResultAddModal('resultModal',${student.id})"
+      ${student.result?`<button onclick="viewResult('resultViewModal',${student.id})"
       class="bg-orange-600 transform duration-300 hover:bg-orange-900 rounded-md text-gray-50 font-bold py-2 px-4"><i
         class="ri-eye-line"></i>
-      View Result</button></td>`:`<button onclick="showResultAddModal('resultModal',${student.id})"
+      View Result</button></td>`:`<button onclick="addResult('resultAddModal',${student.id})"
       class="bg-green-600 transform duration-300 hover:bg-green-900 rounded-md text-gray-50 font-bold py-2 px-4"><i class="ri-add-circle-line"></i>
       Add Result</button></td>`}
       
@@ -289,5 +292,308 @@ function showEditStudentModal(modalTypeId, dataId) {
         });
     }
   });
+
+}
+
+// Show Student resultAdd Add Modal
+function addResult(modalTypeId, dataId) {
+
+  //show result add modal
+  function resultAddModal() {
+    const modal = document.getElementById(modalTypeId);
+    const closeModalBtn = document.querySelectorAll(".closeModalBtn");
+    modal.style.display = "block";
+    closeModalBtn.forEach(item => {
+      item.addEventListener("click", function () {
+        modal.style.display = "none";
+      });
+    });
+    window.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  }
+  resultAddModal()
+  //send get request to get data
+  async function getStudent() {
+    await axios.get("http://localhost:5050/students/" + dataId).then(res => {
+      let name = resultAddForm.querySelector("input[name='name']").value = res.data.name;
+      let email = resultAddForm.querySelector("input[name='email']").value = res.data.email;
+    }).catch(err => {
+      console.log(err.message);
+    });
+  }
+  getStudent();
+
+  function sendResultToDb() {
+    resultAddForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const formData = new FormData(resultAddForm);
+      const objectFormData = Object.fromEntries(formData.entries());
+      const {
+        bangla,
+        english,
+        math,
+        science,
+        sScience,
+        religion
+      } = objectFormData
+      //add validation
+      if (!bangla || !english || !math || !science || !sScience || !religion) {
+        resultMassageContainer.innerHTML = `
+        <div id="msg" class="msg text-red-900 flex place-self-start py-4 px-2 bg-red-300 rounded w-full items-center">
+        <div class="msg-body m-0"> <i class="ri-error-warning-fill"></i> All Feilds Are
+        Required</div>
+          <i onclick="closeAlert()"
+        class="ri-close-circle-fill mr-0 cursor-pointer transform duration-300 hover:scale-110 hover:text-red-700"></i>
+     </div>
+        `;
+      } else {
+        //send patch request to the server
+        axios.patch("http://localhost:5050/students/" + dataId, {
+          result: objectFormData
+        }).then(res => {
+          resultMassageContainer.innerHTML = ` 
+            <div id="msg" class="msg text-green-800 flex place-self-start py-4 px-2 bg-green-200 rounded w-full items-center">
+               <div class="msg-body m-0"> <i class="ri-checkbox-line"></i> Result Has added succecfully SuccessFully</div>
+           <i onclick="closeAlert()"
+             class="ri-close-circle-fill mr-0 cursor-pointer transform duration-300 hover:scale-110 hover:text-red-700"></i>
+         </div>`;
+          resultAddForm.reset();
+          //  show the updated data
+          getAllStudent("http://localhost:5050/students");
+        }).catch(error => {
+          console.log(err.message);
+        });
+      }
+    });
+  }
+  sendResultToDb();
+
+}
+// Show Student Result Sheet
+// Show Student resultAdd Add Modal
+function viewResult(modalTypeId, dataId) {
+  //show result add modal
+  function showViewResulModal() {
+    const modal = document.getElementById(modalTypeId);
+    modal.style.display = "block";
+
+    async function makeResultDynamic() {
+      //send get request to server
+      await axios.get("http://localhost:5050/students/" + dataId).then(res => {
+
+        resultViewModal.innerHTML = `
+      <div class="modal-content">
+      <span id="editcloseModalBtn" class="close closeModalBtn">&times;</span>
+      <div class="marksheet border-4 rounded-md border-green-800">
+        <div class="marksheet-header flex justify-center my-10 border-1 border-gray-700">
+          <img class="institute_logo w-48 h-28 object-fill" src="./public/src/images/download.png"
+            alt="institute logo" />
+          <div class="institute-info mt-8 px-7">
+            <h2 class="text-4xl font-bold font-serif">
+              Sorobindu Pilot High School
+            </h2>
+            <p>Chowrangi KachaBazar, Suihari, Dinajpur Sadar, Dinajpur</p>
+            <h4 class="text-2xl font-medium">
+              Secondary School Certificate - 2023
+            </h4>
+          </div>
+          <img class="devripon_logo w-44" src="./public/src/images/devriponlog.png" alt="devripon logo" />
+        </div>
+        <div class="student-info-area border-2 border-gray-700 py-5 w-11/12 block m-auto px-5">
+          <div class="info-group flex mt-2">
+            <h4 class="pr-4 font-medium">Student Name :</h4>
+            <p>${res.data.name}</p>
+          </div>
+          <div class="info-group flex mt-2">
+             <h4 class="pr-4 font-medium">Student Email :</h4>
+             <p>${res.data.email}</p>
+          </div>
+         <div class="info-group flex mt-2">
+             <h4 class="pr-4 font-medium">Student Cell :</h4>
+            <p>${res.data.phone}</p>
+         </div>
+          <div class="info-group flex mt-2">
+            <h4 class="pr-4 font-medium">Student Gender :</h4>
+            <p>${res.data.gender}</p>
+         </div>
+        <div class="info-group flex mt-2">
+           <h4 class="pr-4 font-medium">Student Address :</h4>
+           <p>${res.data.address}</p>
+        </div>
+          <div class="info-group flex mt-2">
+            <h4 class="pr-4 font-medium">Academic Year :</h4>
+            <p>2023-2024</p>
+          </div>
+        </div>
+  
+        <div class="result-area">
+          <table id="result-table"
+            class="w-11/12 m-auto mt-5 table-auto border-collapse border-spacing-2 border border-slate-500 text-gray-700 text-sm">
+            <thead class="border-1 border-gray-600 h-8 bg-slate-200">
+              <th class="border-1 border-gray-600">Sl</th>
+              <th class="border-1 border-gray-600">Subject Name</th>
+              <th class="border-1 border-gray-600">Maximum Marks</th>
+              <th class="border-1 border-gray-600">Obtained Marks</th>
+              <th class="border-1 border-gray-600">GPA</th>
+              <th class="border-1 border-gray-600">GRADE</th>
+            </thead>
+            <tbody class="border-1 h-8 m-auto text-center">
+              <tr class="border-1 py-4 h-8 border-gray-800">
+                <td class="border-1 border-gray-600">1</td>
+                <td class="border-1 border-gray-600">Bangla</td>
+                <td class="border-1 border-gray-600">100</td>
+                <td class="border-1 border-gray-600">
+                 80
+                </td>
+                <td class="border-1 border-gray-600">
+                  bangla gpa
+                </td>
+                <td class="border-1 border-gray-600">
+                  bangla grade
+                </td>
+              </tr>
+              <tr class="border-1 py-4 h-8 border-gray-800">
+                <td class="border-1 border-gray-600">2</td>
+                <td class="border-1 border-gray-600">English</td>
+                <td class="border-1 border-gray-600">100</td>
+                <td class="border-1 border-gray-600">
+                 90
+                </td>
+                <td class="border-1 border-gray-600">
+                english gpa
+                </td>
+                <td class="border-1 border-gray-600">
+                  english grade
+                </td>
+              </tr>
+              <tr class="border-1 py-4 h-8 border-gray-800">
+                <td class="border-1 border-gray-600">3</td>
+                <td class="border-1 border-gray-600">Mathmatics</td>
+                <td class="border-1 border-gray-600">100</td>
+                <td class="border-1 border-gray-600">
+                 90
+                </td>
+                <td class="border-1 border-gray-600">
+                  mathmatics gpa
+                </td>
+                <td class="border-1 border-gray-600">
+               mathmatics grade
+                </td>
+              </tr>
+              <tr class="border-1 py-4 h-8 border-gray-800">
+                <td class="border-1 border-gray-600">4</td>
+                <td class="border-1 border-gray-600">Mathmatics</td>
+                <td class="border-1 border-gray-600">100</td>
+                <td class="border-1 border-gray-600">
+                90
+                </td>
+                <td class="border-1 border-gray-600">
+                  science gpa
+                </td>
+                <td class="border-1 border-gray-600">
+                science grade
+                </td>
+              </tr>
+              <tr class="border-1 py-4 h-8 border-gray-800">
+                <td class="border-1 border-gray-600">5</td>
+                <td class="border-1 border-gray-600">Social Science</td>
+                <td class="border-1 border-gray-600">100</td>
+                <td class="border-1 border-gray-600">
+                90
+                </td>
+                <td class="border-1 border-gray-600">
+                 social science gpa
+                </td>
+                <td class="border-1 border-gray-600">
+                social science grade
+                </td>
+              </tr>
+              <tr class="border-1 py-4 h-8 border-gray-800">
+                <td class="border-1 border-gray-600">6</td>
+                <td class="border-1 border-gray-600">Religion</td>
+                <td class="border-1 border-gray-600">100</td>
+                <td class="border-1 border-gray-600">
+                  90
+                </td>
+                <td class="border-1 border-gray-600">
+                  religion gpa
+                </td>
+                <td class="border-1 border-gray-600">
+                 religion grade
+                </td>
+              </tr>
+              <tr class="border-1 bg-teal-100 py-4 h-8 border-gray-800">
+                <td colspan="3" class="border-1 border-gray-600 bg-blue-300 text-white">
+                  CGPA : 
+                </td>
+                <td colspan="3" class="border-1 border-gray-600 bg-blue-300 text-white">
+                  GRADE :
+                </td>
+              </tr>
+              <tr class="border-1 bg-teal-100 py-4 h-8 border-gray-800">
+                <td colspan="6" class="border-1 text-start text-white pl-7 bg-blue-400 border-blue-500">
+                  Result :
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="signature-area h-60 items-center flex justify-between w-11/12 m-auto">
+          <div class="mentor-sign mt-48 flex flex-col justify-center items-center">
+            <img src="./public/src/images/img.png" alt="signature" />
+            <p class="text-xs font-medium">Mentor's Sign</p>
+          </div>
+          <div class="office-seal flex flex-col justify-center items-center">
+            <img src="./public/src/images/sorobindu_seal.png" alt="signature" />
+            <p class="text-xs font-medium">Office Seal</p>
+          </div>
+          <div class="principal-sign mt-48 flex flex-col justify-center items-center">
+            <img src="./public/src/images/img (1).png" alt="signature" />
+            <p class="text-xs font-medium">Principal's Sign</p>
+          </div>
+        </div>
+        <div class="discalimer mt-10">
+          <p class="py-5 w-11/12 block m-auto text-xs font-medium">
+            NB :
+            <span class="font-normal">Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+              Beatae at in quasi eos fugit possimus doloribus quam qui iusto
+              rerum.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+      `;
+
+      }).catch();
+
+
+
+
+    }
+    makeResultDynamic();
+
+
+
+
+    const closeModalBtn = document.querySelectorAll(".closeModalBtn");
+
+    closeModalBtn.forEach(item => {
+      item.addEventListener("click", function () {
+        modal.style.display = "none";
+      });
+    });
+    window.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  }
+  showViewResulModal()
+
+
+
 
 }

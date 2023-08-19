@@ -17,25 +17,6 @@ function showStudentAddModal(modalTypeId) {
 }
 
 
-// Show Student resultAdd Add Modal
-function showResultAddModal(modalTypeId) {
-  const modal = document.getElementById(modalTypeId);
-  const closeModalBtn = document.querySelectorAll(".closeModalBtn");
-  modal.style.display = "block";
-
-  closeModalBtn.forEach(item => {
-    item.addEventListener("click", function () {
-      modal.style.display = "none";
-    });
-  });
-  window.addEventListener("click", function (event) {
-    if (event.target === modal) {
-      modal.style.display = "none";
-    }
-  });
-}
-
-
 
 //adding page loader
 window.addEventListener("load", function () {
